@@ -1,6 +1,5 @@
 ### 
-GET http://localhost:3000/products?name=/^win/i
-
+GET http://localhost:3000/products
 ###
 GET http://localhost:3000/products/2026-05-26T04:43:39.000Z
 
@@ -25,7 +24,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/products/2026-05-26T04:43:39.000
+DELETE http://localhost:3000/products/2026-05-26T04:43:39.000Z
 
 ### AI Generated Tests ###
 
