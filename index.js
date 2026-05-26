@@ -40,14 +40,13 @@ app.get('/products', (req, res, next) => {
 });
 
 app.get('/products/:id', (req, res, next) => {
-    // const yo = String(Number(req.params.id)-1);
-    const id = req.params.id;
-    // console.log(id);
-    // res.send(products[yo])
-    // const index = products.indexOf(id);
-    // console.log(products.find((i) => i.id === id));
     try {
-        return res.status(200).json(products.find((i) => i.id === id));
+        const id = req.params.id;
+        const product = products.find((i) => i.id === id);
+        if (!product) {
+            return next(Object.assign(new Error("Product not found"), { status: 404 }));
+        }
+        return res.status(200).json(product);
     } catch (err) {
         return next(err);
     }
@@ -56,7 +55,7 @@ app.get('/products/:id', (req, res, next) => {
 app.post('/products', (req, res, next) => {
     // console.log(req.body);
     let { name, price, quantity } = (req.body || {});
-    if (!name || !price) return next(Object.assign(new Error("name and price are required"), { status: 401 }));
+    if (!name || !price) return next(Object.assign(new Error("name and price are required"), { status: 400 }));
     if (!quantity) quantity = "1";
     const data = { id: crypto.randomUUID(), name, price, quantity };
     products.push(data);
@@ -64,34 +63,42 @@ app.post('/products', (req, res, next) => {
 });
 
 app.put('/products/:id', (req, res, next) => {
-    const id = req.params.id;
-    let { name, price, quantity } = (req.body || {});
-    const product = products.find((i) => i.id === id);
-    if (!product) return next(Object.assign(new Error("id not found"), { status: 401 }));
-    const index = (products.indexOf(product));
-    products[index].name = (name || products[index].name);
-    products[index].price = (price || products[index].price);
-    products[index].quantity = (quantity || products[index].quantity);
-    return res.status(200).json({ success: true, data: products[index] });
+    try {
+        const id = req.params.id;
+        let { name, price, quantity } = (req.body || {});
+        const product = products.find((i) => i.id === id);
+        if (!product) return next(Object.assign(new Error("id not found"), { status: 404 }));
+        const index = (products.indexOf(product));
+        products[index].name = (name || products[index].name);
+        products[index].price = (price || products[index].price);
+        products[index].quantity = (quantity || products[index].quantity);
+        return res.status(200).json({ success: true, data: products[index] });
+    } catch (err) {
+        return next(err);
+    }
 });
 
 app.delete('/products/:id', (req, res, next) => {
-    const id = req.params.id;
-    const product = products.find((i) => i.id === id);
-    if (!product) return res.status(400).json({ success: false, message: "id not found!" });
-    const index = (products.indexOf(product));
-    // console.log(products.splice(products[index], products[index + 1]));
-    // const [dataDeleted] = products.splice(products[index], products[index + 1]);
-    // console.log(dataDeleted);
-    const [del] = products.splice(products[index], 1)
-    return res.status(200).json({ success: true, data: del });
+    try {
+        const id = req.params.id;
+        const product = products.find((i) => i.id === id);
+        if (!product) return res.status(404).json({ success: false, message: "id not found!" });
+        const index = (products.indexOf(product));
+        // console.log(products.splice(products[index], products[index + 1]));
+        // const [dataDeleted] = products.splice(products[index], products[index + 1]);
+        // console.log(dataDeleted);
+        const [del] = products.splice(index, 1)
+        return res.status(200).json({ success: true, data: del });
+    } catch (err) {
+        return next(err);
+    }
 });
 
 app.use((err, req, res, next) => {
     // console.error(err.stack);
     res.status(err.status || 500).json({
         success: false,
-        message: err.message || "Internal Server Error!",
+        message: (err.message || "Internal Server Error!"),
         path: req.originalUrl,
         method: req.method,
         timestamp: new Date().toISOString(),
