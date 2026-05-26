@@ -25,4 +25,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/products/2026-05-26T04:43:39.000Z
+DELETE http://localhost:3000/products/2026-05-26T04:43:39.000

@@ -47,13 +47,13 @@ Each product should have at minimum:
 
 ### Core (everyone)
 
-- [ ] Express server created and listening on a port
-- [ ] `node --watch` used to run the server (no need for nodemon)
-- [ ] `express.json()` middleware applied
-- [ ] All five routes implemented (GET all, GET one, POST, PUT/PATCH, DELETE)
-- [ ] Route parameters used to identify a product (`/products/:id`)
+- [x] Express server created and listening on a port
+- [x] `node --watch` used to run the server (no need for nodemon)
+- [x] `express.json()` middleware applied
+- [x] All five routes implemented (GET all, GET one, POST, PUT/PATCH, DELETE)
+- [x] Route parameters used to identify a product (`/products/:id`)
 - [ ] At least one query string supported (e.g. filter by name or sort by price)
-- [ ] Products stored in an in-memory array (no database required)
+- [x] Products stored in an in-memory array (no database required)
 - [ ] Correct HTTP status codes returned (200, 201, 400, 404)
 - [ ] At least one custom middleware written (e.g. a request logger)
 - [ ] Error handling middleware included at the end of the middleware chain
