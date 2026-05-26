@@ -1,5 +1,5 @@
 ### 
-GET http://localhost:3000/products
+GET http://localhost:3000/products?name=/^winn/i
 
 ###
 GET http://localhost:3000/products/308fe7e7-fe00-4aa2-932b-4fe676317cfe
@@ -11,7 +11,7 @@ Content-Type: application/json
 {
     "name": "Jay",
     "price": "20",
-    "quantity": "2"
+    "quantity": ""
 }
 
 ###
@@ -19,8 +19,8 @@ PUT http://localhost:3000/products/2026-05-26T04:43:39.000Z
 Content-Type: application/json
 
 {
-    "name": "Jo",
-    "price": "",
+    "name": "Palm",
+    "price": "80",
     "quantity": ""
 }
 

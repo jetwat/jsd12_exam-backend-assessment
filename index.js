@@ -6,51 +6,78 @@ import { products } from "./src/data/products.js";
 const app = express();
 app.use(express.json());
 
-const port = 3000;
+app.use((req, res, next) => {
+    const method = req.method;
+    const url = req.url;
+    const time = new Date().toISOString();
 
-app.get('/', (req, res) => {
-    return res.send('This is homepage');
+    console.log(`[${time}] ${method} request to ${url}`);
+
+    next();
 });
 
-app.get('/products', (req, res) => {
-    return res.status(200).json(products);
+app.get('/', (req, res, next) => {
+    try {
+        return res.send('This is homepage');
+    } catch (err) {
+        return next(err);
+    }
 });
 
-app.get('/products/:id', (req, res) => {
+app.get('/products', (req, res, next) => {
+    try {
+        let data = products;
+        const { name } = req.query;
+        if (name) {
+            const [_, pattern, flags] = (name.match(/^\/(.*?)\/([gimsuy]*)$/) || [null, name, ""]);
+            const regex = new RegExp(pattern, flags);
+            data = products.filter(i => regex.test(i.name));
+        }
+        return res.status(200).json(data)
+    } catch (err) {
+        return next(err);
+    };
+});
+
+app.get('/products/:id', (req, res, next) => {
     // const yo = String(Number(req.params.id)-1);
     const id = req.params.id;
     // console.log(id);
     // res.send(products[yo])
     // const index = products.indexOf(id);
     // console.log(products.find((i) => i.id === id));
-    return res.status(200).json(products.find((i) => i.id === id));
+    try {
+        return res.status(200).json(products.find((i) => i.id === id));
+    } catch (err) {
+        return next(err);
+    }
 });
 
-app.post('/products', (req, res) => {
+app.post('/products', (req, res, next) => {
     // console.log(req.body);
-    let { name, price, quantity } = req.body || {};
-    if (!name || !price) return res.status(401).json({ success: false, message: "name and price are required!!!!!!!!!!" })
+    let { name, price, quantity } = (req.body || {});
+    if (!name || !price) return next(Object.assign(new Error("name and price are required"), { status: 401 }));
     if (!quantity) quantity = "1";
     const data = { id: crypto.randomUUID(), name, price, quantity };
     products.push(data);
-    return res.status(200).json({ success: true, data });
+    return res.status(201).json({ success: true, data });
 });
 
-app.put('/products/:id', (req, res) => {
+app.put('/products/:id', (req, res, next) => {
     const id = req.params.id;
-    let { name, price, quantity } = req.body || {};
+    let { name, price, quantity } = (req.body || {});
     const product = products.find((i) => i.id === id);
-    if (!product) return res.status(400).json({ success: false, message: "id not found!" });
+    if (!product) return next(Object.assign(new Error("id not found"), { status: 401 }));
     const index = (products.indexOf(product));
-    products[index].name = name;
-    products[index].price = price;
-    products[index].quantity = quantity;
+    products[index].name = (name || products[index].name);
+    products[index].price = (price || products[index].price);
+    products[index].quantity = (quantity || products[index].quantity);
     return res.status(200).json({ success: true, data: products[index] });
 });
 
-app.delete('/products/:id', (req, res) => {
+app.delete('/products/:id', (req, res, next) => {
     const id = req.params.id;
-    const product = products.find((i) => i.id === id); 
+    const product = products.find((i) => i.id === id);
     if (!product) return res.status(400).json({ success: false, message: "id not found!" });
     const index = (products.indexOf(product));
     // console.log(products.splice(products[index], products[index + 1]));
@@ -60,16 +87,20 @@ app.delete('/products/:id', (req, res) => {
     return res.status(200).json({ success: true, data: del });
 });
 
-    // const index = items.findIndex(item => item.id === parseInt(req.params.id));
-    // if (index !== -1) {
-    //     items.splice(index, 1);
-    //     res.status(200).send("Deleted successfully");
-    // } else {
-    //     res.status(404).send("Item not found");
-    // }
+app.use((err, req, res, next) => {
+    // console.error(err.stack);
+    res.status(err.status || 500).json({
+        success: false,
+        message: err.message || "Internal Server Error!",
+        path: req.originalUrl,
+        method: req.method,
+        timestamp: new Date().toISOString(),
+        stack: err.stack,
+    });
+})
 
-
-// ===========================
+// =========================== Not in Request-Response Cycle
+const port = 3000;
 app.listen(port, () => {
     console.log(`http://localhost:${port}`);
 });
