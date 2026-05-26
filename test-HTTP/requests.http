@@ -26,3 +26,42 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3000/products/2026-05-26T04:43:39.000
+
+### AI Generated Tests ###
+
+### Get Homepage
+GET http://localhost:3000/
+
+### Create a new product
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+    "name": "Matcha Latte",
+    "price": "65",
+    "quantity": "1"
+}
+
+### Create product with default quantity (1)
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+    "name": "Espresso",
+    "price": "50"
+}
+
+### Error Test: Create product without price (400 Bad Request)
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+    "name": "Free Coffee"
+}
+
+### Error Test: Get non-existent product (404 Not Found)
+GET http://localhost:3000/products/unknown-id-123
+
+### Error Test: Delete non-existent product (404 Not Found)
+DELETE http://localhost:3000/products/unknown-id-123
+
