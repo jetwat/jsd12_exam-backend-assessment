@@ -25,7 +25,7 @@ Do not copy from documentation, your code comments, or AI output. If you are uns
 
 **2. What is `express.json()` and what would happen if you left it out?**
 
-*Your answer:*
+*Your answer: req.body เป็น undefined*
 
 ---
 
