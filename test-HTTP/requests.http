@@ -1,11 +1,11 @@
 ### 
-GET http://localhost:3000/products?name=/^winn/i
+GET http://localhost:3000/products?name=/^win/i
 
 ###
-GET http://localhost:3000/products/308fe7e7-fe00-4aa2-932b-4fe676317cfe
+GET http://localhost:3000/products/2026-05-26T04:43:39.000Z
 
 ###
-PATCH http://localhost:3000/products
+POST http://localhost:3000/products
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:3000/products/2026-05-26T04:43:39.000Z
+PATCH http://localhost:3000/products/2026-05-26T04:43:39.000Z
 Content-Type: application/json
 
 {

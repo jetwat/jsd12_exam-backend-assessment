@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { products } from "./src/data/products.js";
 
 const app = express();
+
 app.use(express.json());
 
 app.use((req, res, next) => {
