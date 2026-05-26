@@ -1,0 +1,15 @@
+{
+  "name": "jsd12-backend-assessment",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Jetwat W.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
