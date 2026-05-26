@@ -62,10 +62,11 @@ app.post('/products', (req, res, next) => {
     return res.status(201).json({ success: true, data });
 });
 
-app.put('/products/:id', (req, res, next) => {
+app.patch('/products/:id', (req, res, next) => {
     try {
         const id = req.params.id;
         let { name, price, quantity } = (req.body || {});
+        // if (!(name && price && quantity)) return next(Object.assign(new Error("new name, price, and quantity required for PUT")));
         const product = products.find((i) => i.id === id);
         if (!product) return next(Object.assign(new Error("id not found"), { status: 404 }));
         const index = (products.indexOf(product));

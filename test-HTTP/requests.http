@@ -5,7 +5,7 @@ GET http://localhost:3000/products?name=/^winn/i
 GET http://localhost:3000/products/308fe7e7-fe00-4aa2-932b-4fe676317cfe
 
 ###
-POST http://localhost:3000/products
+PATCH http://localhost:3000/products
 Content-Type: application/json
 
 {

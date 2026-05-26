@@ -54,7 +54,7 @@ Each product should have at minimum:
 - [x] Route parameters used to identify a product (`/products/:id`)
 - [x] At least one query string supported (e.g. filter by name or sort by price)
 - [x] Products stored in an in-memory array (no database required)
-- [ ] Correct HTTP status codes returned (200, 201, 400, 404)
+- [x] Correct HTTP status codes returned (200, 201, 400, 404)
 - [x] At least one custom middleware written (e.g. a request logger)
 - [x] Error handling middleware included at the end of the middleware chain
 - [x] Meaningful error messages returned when something goes wrong
